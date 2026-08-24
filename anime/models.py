@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # ۱. جدول ژانرها
 
 
@@ -44,3 +44,34 @@ class Anime(models.Model):
 
     def __str__(self):
         return self.title_en
+
+
+
+
+# ۴. جدول لیست شخصی کاربران (قلب MyAnimeMap)
+class UserAnimeList(models.Model):
+    LIST_STATUS_CHOICES = (
+        ('watching', 'در حال تماشا'),
+        ('completed', 'کامل شده'),
+        ('on_hold', 'متوقف شده (On Hold)'),
+        ('dropped', 'رها شده (Dropped)'),
+        ('plan_to_watch', 'قصد تماشا دارم'),
+    )
+
+    # ارتباط با جدول کاربرها و جدول انیمه‌ها
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="کاربر")
+    anime = models.ForeignKey(Anime, on_delete=models.CASCADE, verbose_name="انیمه")
+    
+    # اطلاعات لیست
+    status = models.CharField(max_length=20, choices=LIST_STATUS_CHOICES, default='plan_to_watch', verbose_name="وضعیت")
+    score = models.IntegerField(default=0, verbose_name="امتیاز (۱ تا ۱۰)")
+    episodes_watched = models.IntegerField(default=0, verbose_name="تعداد قسمت‌های دیده شده")
+
+    class Meta:
+        # این خط میگه یه کاربر نمیتونه یه انیمه رو دو بار به لیستش اضافه کنه!
+        unique_together = ('user', 'anime')
+        verbose_name = "لیست انیمه کاربر"
+        verbose_name_plural = "لیست انیمه کاربران"
+
+    def __str__(self):
+        return f"{self.user.username} - {self.anime.title_en}"

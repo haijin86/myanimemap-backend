@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Genre, Studio, Anime
+from .models import Genre, Studio, Anime, UserAnimeList
 
 # مترجم ژانرها
 class GenreSerializer(serializers.ModelSerializer):
@@ -21,4 +21,12 @@ class AnimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Anime
+        fields = '__all__'
+        
+        
+        
+# مترجم لیست انیمه‌های کاربر
+class UserAnimeListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAnimeList
         fields = '__all__'
