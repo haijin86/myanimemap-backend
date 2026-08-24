@@ -29,7 +29,7 @@ class Anime(models.Model):
         ('finished', 'پایان یافته'),
         ('upcoming', 'به زودی'),
     )
-
+    cover_image = models.ImageField(upload_to='anime_covers/', null=True, blank=True, verbose_name="عکس کاور انیمه")
     title_en = models.CharField(max_length=255, verbose_name="عنوان انگلیسی")
     title_fa = models.CharField(
         max_length=255, null=True, blank=True, verbose_name="عنوان فارسی")
