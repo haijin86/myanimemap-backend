@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Genre, Studio, Anime, UserAnimeList
-
+from django.contrib.auth.models import User
 # مترجم ژانرها
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,3 +30,23 @@ class UserAnimeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAnimeList
         fields = '__all__'
+        read_only_fields = ('user',)
+        
+        
+        
+# مترجم ثبت‌نام کاربر جدید
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+        # این خط میگه پسورد رو فقط بگیر ولی هیچوقت به کسی نشونش نده
+        extra_kwargs = {'password': {'write_only': True}} 
+
+    # این تابع پسورد رو قبل از ذخیره شدن، قفل (رمزنگاری) می‌کنه
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email', ''),
+            password=validated_data['password']
+        )
+        return user

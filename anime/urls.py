@@ -7,7 +7,7 @@ router = DefaultRouter()
 router.register(r'genres', views.GenreViewSet)
 router.register(r'studios', views.StudioViewSet)
 router.register(r'animes', views.AnimeViewSet)
-router.register(r'user-list', views.UserAnimeListViewSet)
+router.register(r'user-list', views.UserAnimeListViewSet, basename='user-list')
 
 urlpatterns = [
     path('', include(router.urls)),
